@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.mangatrack_v2.ui.components.MangaCard
 import com.example.mangatrack_v2.viewmodel.MangaViewModel
 
 @Composable
@@ -22,9 +23,7 @@ fun LibraryScreen(navController: NavController, viewModel: MangaViewModel = view
 
         items(mangas.value) { manga ->
 
-            Text(
-                text = manga.title
-            )
+            MangaCard(manga)
 
         }
 
