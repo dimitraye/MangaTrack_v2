@@ -45,7 +45,14 @@ fun LibraryScreen(
         ) {
 
             items(mangas.value) { manga ->
-                MangaCard(manga)
+                MangaCard(
+                    manga = manga,
+                    onClick = {
+                        navController.navigate(
+                            Routes.mangaDetails(manga.id)
+                        )
+                    }
+                )
             }
 
         }

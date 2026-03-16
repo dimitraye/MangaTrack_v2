@@ -20,6 +20,12 @@ class MangaViewModel(
         }
     }
 
+    fun updateManga(manga: MangaEntity) {
+        viewModelScope.launch {
+            repository.updateManga(manga)
+        }
+    }
+
     fun deleteManga(manga: MangaEntity) {
         viewModelScope.launch {
             repository.deleteManga(manga)
