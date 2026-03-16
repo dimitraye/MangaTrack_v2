@@ -4,10 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.mangatrack_v2.ui.screens.AddMangaScreen
 import com.example.mangatrack_v2.ui.screens.HomeScreen
 import com.example.mangatrack_v2.ui.screens.LibraryScreen
 import com.example.mangatrack_v2.ui.screens.ProfileScreen
 import com.example.mangatrack_v2.ui.screens.SettingsScreen
+import com.example.mangatrack_v2.ui.screens.UserStatsScreen
 
 @Composable
 fun AppNavigation() {
@@ -35,7 +37,11 @@ fun AppNavigation() {
         }
 
         composable(Routes.USER_STATS) {
-            SettingsScreen(navController)
+            UserStatsScreen(navController)
+        }
+
+        composable(Routes.ADD_MANGA) {
+            AddMangaScreen(navController)
         }
 
 
