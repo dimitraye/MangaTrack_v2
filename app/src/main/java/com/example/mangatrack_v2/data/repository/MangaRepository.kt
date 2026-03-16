@@ -5,9 +5,7 @@ import com.example.mangatrack_v2.data.entity.MangaEntity
 
 class MangaRepository (private val mangaDao: MangaDao) {
 
-    suspend fun getAllMangas(): List<MangaEntity> {
-        return mangaDao.getAllMangas()
-    }
+    fun getAllMangas() = mangaDao.getAllMangas()
 
     suspend fun insertManga(manga: MangaEntity) {
         mangaDao.insertManga(manga)
