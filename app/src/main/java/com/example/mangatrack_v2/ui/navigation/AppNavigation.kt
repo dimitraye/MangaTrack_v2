@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mangatrack_v2.ui.screens.HomeScreen
 import com.example.mangatrack_v2.ui.screens.LibraryScreen
+import com.example.mangatrack_v2.ui.screens.MangaDetailsScreen
 import com.example.mangatrack_v2.ui.screens.ProfileScreen
 import com.example.mangatrack_v2.ui.screens.SettingsScreen
 
@@ -36,6 +37,21 @@ fun AppNavigation() {
 
         composable(Routes.USER_STATS) {
             SettingsScreen(navController)
+        }
+
+        composable(
+            route = Routes.MANGA_DETAILS
+        ) { backStackEntry ->
+
+            val mangaId = backStackEntry.arguments
+                ?.getString("mangaId")
+                ?.toLongOrNull()
+
+            MangaDetailsScreen(
+                navController = navController,
+                mangaId = mangaId
+            )
+
         }
 
 

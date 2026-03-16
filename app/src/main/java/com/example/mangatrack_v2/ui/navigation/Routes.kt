@@ -4,10 +4,12 @@ object Routes  {
 
     const val HOME = "home"
     const val LIBRARY = "library"
-    const val MANGA_DETAILS = "manga_details"
+    const val MANGA_DETAILS = "manga_details/{mangaId}"
     const val ADD_MANGA = "add_manga"
     const val PROFILE = "profile"
     const val SETTINGS = "settings"
     const val USER_STATS = "user_stats"
+
+    fun mangaDetails(mangaId: Long) = "manga_details/$mangaId"
 
 }
