@@ -7,7 +7,7 @@ import com.example.mangatrack_v2.data.entity.MangaEntity
 interface MangaDao {
 
     @Query("SELECT * FROM manga")
-    suspend fun getAllMangas(): List<MangaEntity>
+    fun getAllMangas(): kotlinx.coroutines.flow.Flow<List<MangaEntity>>
 
     @Insert
     suspend fun insertManga(manga: MangaEntity)

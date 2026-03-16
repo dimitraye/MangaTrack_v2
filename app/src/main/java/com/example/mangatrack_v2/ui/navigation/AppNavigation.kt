@@ -34,5 +34,10 @@ fun AppNavigation() {
             SettingsScreen(navController)
         }
 
+        composable(Routes.USER_STATS) {
+            SettingsScreen(navController)
+        }
+
+
     }
 }
