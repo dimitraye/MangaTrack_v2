@@ -1,16 +1,19 @@
 package com.example.mangatrack_v2.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mangatrack_v2.data.entity.MangaEntity
 import com.example.mangatrack_v2.data.repository.MangaRepository
-import com.example.mangatrack_v2.util.MangaStatus
+import com.example.mangatrack_v2.database.MangaDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class MangaViewModel(
-    private val repository: MangaRepository
-) : ViewModel() {
+class MangaViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val dao = MangaDatabase.getDatabase(application).mangaDao()
+
+    private val repository = MangaRepository(dao)
 
     val mangas: Flow<List<MangaEntity>> = repository.getAllMangas()
 
@@ -29,27 +32,6 @@ class MangaViewModel(
     fun deleteManga(manga: MangaEntity) {
         viewModelScope.launch {
             repository.deleteManga(manga)
-        }
-    }
-
-    init {
-        viewModelScope.launch {
-            repository.insertManga(
-                MangaEntity(
-                    title = "Test Manga",
-                    status = MangaStatus.PLANNED,
-                    chaptersRead = 0,
-                    chaptersTotal = 100,
-                    author = null,
-                    artist = null,
-                    genre = null,
-                    rating = null,
-                    review = null,
-                    coverImagePath = null,
-                    createdAt = System.currentTimeMillis(),
-                    updatedAt = System.currentTimeMillis()
-                )
-            )
         }
     }
 }
