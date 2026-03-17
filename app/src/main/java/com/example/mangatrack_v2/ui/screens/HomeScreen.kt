@@ -2,6 +2,7 @@ package com.example.mangatrack_v2.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -35,16 +36,46 @@ fun HomeScreen(
 
         // 🔥 SECTION 1 — Recent mangas
         item {
-            Text(
-                text = "Recent mangas",
-                style = MaterialTheme.typography.headlineSmall
-            )
 
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+            LazyRow(
+                modifier = Modifier.fillMaxWidth()
+            ) {
 
-        items(recentMangas) { manga ->
-            Text(text = manga.title)
+                items(recentMangas) { manga ->
+
+                    Card(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .width(150.dp)
+                            .height(120.dp),
+
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+
+                        Column(
+                            modifier = Modifier.padding(12.dp)
+                        ) {
+
+                            Text(
+                                text = manga.title,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Text(
+                                text = "${manga.chaptersRead}/${manga.chaptersTotal ?: "?"}",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+
+                        }
+
+                    }
+
+                }
+
+            }
+
         }
 
         // 🔥 SECTION 2 — Notifications (placeholder)
