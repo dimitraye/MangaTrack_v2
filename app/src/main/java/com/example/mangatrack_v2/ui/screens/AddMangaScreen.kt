@@ -14,6 +14,10 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import coil.compose.AsyncImage
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import androidx.compose.ui.platform.LocalContext
+import com.example.mangatrack_v2.notification.ReminderScheduler
 
 @Composable
 fun AddMangaScreen(
@@ -29,6 +33,8 @@ fun AddMangaScreen(
     ) { uri: Uri? ->
         imageUri = uri
     }
+    var reminderTime by remember { mutableStateOf<Long?>(null) }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -79,6 +85,62 @@ fun AddMangaScreen(
         Button(
             onClick = {
 
+                val calendar = java.util.Calendar.getInstance()
+
+                DatePickerDialog(
+                    context,
+                    { _, year, month, day ->
+
+                        TimePickerDialog(
+                            context,
+                            { _, hour, minute ->
+
+                                val selectedCalendar = java.util.Calendar.getInstance().apply {
+                                    set(year, month, day, hour, minute)
+                                }
+
+                                reminderTime = selectedCalendar.timeInMillis
+
+                            },
+                            calendar.get(java.util.Calendar.HOUR_OF_DAY),
+                            calendar.get(java.util.Calendar.MINUTE),
+                            true
+                        ).show()
+
+                    },
+                    calendar.get(java.util.Calendar.YEAR),
+                    calendar.get(java.util.Calendar.MONTH),
+                    calendar.get(java.util.Calendar.DAY_OF_MONTH)
+                ).show()
+
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Set Reminder")
+        }
+
+        reminderTime?.let {
+            Text(
+                text = "Reminder set ✔",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        Button(
+            onClick = {
+
+                // 🔔 PROGRAMMER LA NOTIFICATION
+                reminderTime?.let { time ->
+
+                    ReminderScheduler.scheduleReminder(
+                        context,
+                        time,
+                        title,
+                        "Time to read your manga!"
+                    )
+
+                }
+
                 val manga = MangaEntity(
                     title = title,
                     status = MangaStatus.PLANNED,
@@ -90,6 +152,7 @@ fun AddMangaScreen(
                     rating = null,
                     review = null,
                     coverImagePath = imageUri?.toString(),
+                    reminderTime = reminderTime,
                     createdAt = System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis()
                 )

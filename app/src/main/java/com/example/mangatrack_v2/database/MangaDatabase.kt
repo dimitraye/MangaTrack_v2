@@ -10,7 +10,7 @@ import com.example.mangatrack_v2.data.entity.MangaEntity
 
 @Database(
     entities = [MangaEntity::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class MangaDatabase : RoomDatabase() {
@@ -30,7 +30,9 @@ abstract class MangaDatabase : RoomDatabase() {
                     context.applicationContext,
                     MangaDatabase::class.java,
                     "manga_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration(true)
+                    .build()
 
                 INSTANCE = instance
 
