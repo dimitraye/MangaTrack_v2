@@ -17,6 +17,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import com.example.mangatrack_v2.util.MangaStatus
 import androidx.compose.ui.graphics.Color
+import coil.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
 
 @Composable
 fun MangaCard(
@@ -51,6 +53,21 @@ fun MangaCard(
             modifier = Modifier.padding(16.dp)
         ) {
 
+            // 🔥 IMAGE
+            if (manga.coverImagePath != null) {
+                AsyncImage(
+                    model = manga.coverImagePath,
+                    contentDescription = manga.title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp),
+                    contentScale = ContentScale.Crop
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            // 🔥 TITLE
             Text(
                 text = manga.title,
                 style = MaterialTheme.typography.titleMedium
@@ -58,7 +75,7 @@ fun MangaCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // 🔥 Progress bar
+            // 🔥 PROGRESS BAR
             LinearProgressIndicator(
                 progress = { progress },
                 modifier = Modifier.fillMaxWidth(),
@@ -81,7 +98,6 @@ fun MangaCard(
                 color = statusColor,
                 style = MaterialTheme.typography.bodyMedium
             )
-
         }
     }
 }

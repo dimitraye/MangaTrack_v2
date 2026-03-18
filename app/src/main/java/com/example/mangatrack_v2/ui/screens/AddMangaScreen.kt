@@ -10,6 +10,10 @@ import androidx.navigation.NavController
 import com.example.mangatrack_v2.data.entity.MangaEntity
 import com.example.mangatrack_v2.util.MangaStatus
 import com.example.mangatrack_v2.viewmodel.MangaViewModel
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import coil.compose.AsyncImage
 
 @Composable
 fun AddMangaScreen(
@@ -19,6 +23,12 @@ fun AddMangaScreen(
 
     var title by remember { mutableStateOf("") }
     var chaptersTotal by remember { mutableStateOf("") }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+    }
 
     Column(
         modifier = Modifier
@@ -36,6 +46,24 @@ fun AddMangaScreen(
             label = { Text("Title") },
             modifier = Modifier.fillMaxWidth()
         )
+
+        Button(
+            onClick = {
+                imagePickerLauncher.launch("image/*")
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Select Image")
+        }
+        imageUri?.let {
+            AsyncImage(
+                model = it,
+                contentDescription = "Selected image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -61,7 +89,7 @@ fun AddMangaScreen(
                     genre = null,
                     rating = null,
                     review = null,
-                    coverImagePath = null,
+                    coverImagePath = imageUri?.toString(),
                     createdAt = System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis()
                 )
