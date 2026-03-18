@@ -30,6 +30,8 @@ data class MangaEntity(
 
     val coverImagePath: String?,
 
+    val reminderTime: Long?,
+
     val createdAt: Long,
 
     val updatedAt: Long

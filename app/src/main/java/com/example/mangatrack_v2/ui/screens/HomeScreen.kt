@@ -39,6 +39,11 @@ fun HomeScreen(
     val completed = mangas.value.count { it.status == MangaStatus.COMPLETED }
     val context = LocalContext.current
     val activity = context as? Activity
+    val now = System.currentTimeMillis()
+    val upcomingReminders = mangas.value
+        .filter { it.reminderTime != null && it.reminderTime > now }
+        .sortedBy { it.reminderTime }
+        .take(3)
 
     LaunchedEffect(Unit) {
 
@@ -130,32 +135,62 @@ fun HomeScreen(
 
         // 🔥 SECTION 2 — Notifications (placeholder)
         item {
+
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Notifications",
+                text = "Upcoming Reminders",
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text("No notifications yet")
+            if (upcomingReminders.isEmpty()) {
 
+                Text("No reminders scheduled")
 
-            Button(onClick = {
+            } else {
 
-                val time = System.currentTimeMillis() + 5000 // 5 secondes
+                upcomingReminders.forEach { manga ->
 
-                ReminderScheduler.scheduleReminder(
-                    context,
-                    time,
-                    "MangaTrack",
-                    "Time to read your manga!"
-                )
+                    val timeLeft = (manga.reminderTime!! - now) / 1000
 
-            }) {
-                Text("Test Notification")
+                    val displayText = when {
+                        timeLeft < 60 -> "in a few seconds"
+                        timeLeft < 3600 -> "in ${timeLeft / 60} min"
+                        timeLeft < 86400 -> "in ${timeLeft / 3600} h"
+                        else -> "in ${timeLeft / 86400} days"
+                    }
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+
+                        Column(
+                            modifier = Modifier.padding(12.dp)
+                        ) {
+
+                            Text(
+                                text = manga.title,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+
+                            Text(
+                                text = displayText,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+
+                        }
+
+                    }
+
+                }
+
             }
+
         }
 
         // 🔥 SECTION 3 — Stats résumé
