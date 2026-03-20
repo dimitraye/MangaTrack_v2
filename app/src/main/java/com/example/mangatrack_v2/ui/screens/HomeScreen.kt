@@ -22,7 +22,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.app.ActivityCompat
 import android.app.Activity
 import android.os.Build
+import android.util.Log
+import android.widget.Toast
 import com.example.mangatrack_v2.ui.navigation.Routes
+import com.example.mangatrack_v2.util.PdfExporter
+import android.content.Intent
+import com.example.mangatrack_v2.notification.PdfNotificationHelper
 
 @Composable
 fun HomeScreen(
@@ -131,6 +136,52 @@ fun HomeScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        item {
+
+            Button(
+                onClick = {
+
+                    Log.d("PDF", "Export start")
+
+                    try {
+
+                        val uri = PdfExporter.exportMangas(
+                            context,
+                            mangas.value
+                        )
+
+                        Log.d("PDF", "URI: $uri")
+
+                        Toast.makeText(
+                            context,
+                            "PDF généré ✔",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        // 🔥 OUVRIR LE PDF
+                        uri?.let {
+
+                            PdfNotificationHelper.showDownloadNotification(
+                                context,
+                                it
+                            )
+
+                        }
+
+                    } catch (e: Exception) {
+
+                        Log.e("PDF", "ERROR", e)
+
+                    }
+
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Export PDF")
+            }
+
         }
 
         // 🔥 SECTION 2 — Notifications (placeholder)
